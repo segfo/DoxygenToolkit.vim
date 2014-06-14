@@ -300,6 +300,9 @@ endif
 if !exists("g:DoxygenToolkit_returnTag")
   let g:DoxygenToolkit_returnTag = "@return "
 endif
+if !exists("g:DoxygenToolkit_retvalTag")
+  let g:DoxygenToolkit_retvalTag = "@retval "
+endif
 if !exists("g:DoxygenToolkit_throwTag_pre")
   let g:DoxygenToolkit_throwTag_pre = "@throw " " @exception is also valid
 endif
@@ -323,6 +326,9 @@ if !exists("g:DoxygenToolkit_authorTag")
 endif
 if !exists("g:DoxygenToolkit_dateTag")
   let g:DoxygenToolkit_dateTag = "@date "
+endif
+if !exists("g:DoxygenToolkit_dateDelimiter")
+  let g:DoxygenToolkit_dateDelimiter = "-"
 endif
 if !exists("g:DoxygenToolkit_versionTag")
   let g:DoxygenToolkit_versionTag = "@version "
@@ -487,7 +493,8 @@ function! <SID>DoxygenAuthorFunc()
   mark d
   exec "normal o".s:interCommentTag.g:DoxygenToolkit_authorTag.g:DoxygenToolkit_authorName
   exec "normal o".s:interCommentTag.g:DoxygenToolkit_versionTag.g:DoxygenToolkit_versionString
-  let l:date = strftime("%Y-%m-%d")
+  let l:delim = g:DoxygenToolkit_dateDelimiter
+  let l:date = strftime("%Y".l:delim."%m".l:delim."%d")
   exec "normal o".s:interCommentTag.g:DoxygenToolkit_dateTag.l:date
   if ( g:DoxygenToolkit_endCommentTag != "" )
     exec "normal o".s:endCommentTag
@@ -781,6 +788,7 @@ function! <SID>DoxygenCommentFunc()
       exec "normal o".substitute( s:interCommentTag, "[[:blank:]]*$", "", "" )
     endif
     exec "normal o".s:interCommentTag.g:DoxygenToolkit_returnTag
+    exec "normal o".s:interCommentTag.g:DoxygenToolkit_retvalTag
   endif
 
   " Exception (throw) values (cpp only)
